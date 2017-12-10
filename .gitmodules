@@ -1,0 +1,3 @@
+[submodule "plugins/jQuery-Mapael2"]
+	path = plugins/jQuery-Mapael2
+	url = https://github.com/neveldo/jQuery-Mapael.git
