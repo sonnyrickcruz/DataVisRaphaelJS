@@ -17,7 +17,7 @@ function init() {
     maxYear = 2016;
     startYear = 2010;
 
-    for (i = startYear; i <= maxYear; i++) {
+    for (i = maxYear; i > startYear; i--) {
         $("#year").append($(new Option("value", i)).html(i));
     }
 
@@ -99,6 +99,7 @@ function processData(location, year) {
                         }
 
                         if (count > 0) {
+                            var countryTopTrade = getTopTradesPerCountry(datum.trades)
                             if (des.alpha3Code != "USA" && des.alpha3Code != "FRA")
                                 areas[des.alpha2Code].text = { content: datum.ptTitle, attrs: { "font-size": 10 } };
                             links[datum.pt3ISO + datum.rt3ISO] = {
@@ -110,8 +111,12 @@ function processData(location, year) {
                                     "stroke-linecap": "round",
                                     "arrow-end": "block",
                                     opacity: .9
-                                }, tooltip: { content: datum.rt3ISO + " to " + datum.pt3ISO }
+                                }, tooltip: { content: "<div class='font-weight-bold'> Top Import </div>" +  countryTopTrade.imports.topTrade.cmdDescE + 
+                                                        "</br> <span class='font-weight-bold'> Total Value: </span>" + abbreviateNumber(countryTopTrade.imports.total) +
+                                                        "<div class='font-weight-bold'> Top Export </div>" +  countryTopTrade.exports.topTrade.cmdDescE + 
+                                                        "</br> <span class='font-weight-bold'> Total Value: </span>" + abbreviateNumber(countryTopTrade.exports.total)}
                             }
+                            console.log(countryTopTrade)
                             count--;
                         }
                     }
@@ -121,6 +126,42 @@ function processData(location, year) {
             processMapael(plots, links, areas)
         }
     });
+}
+
+function getTopTradesPerCountry(trades) {
+    console.log(trades)
+    imports = {
+        total: 0,
+        topTrade: null
+    }
+    exports = {
+        total: 0,
+        topTrade: null
+    }
+    for (let trade of trades) {
+        if (trade.rgDesc) {
+            if (trade.rgDesc == "Import") {
+                if (imports.topTrade) {
+                    if (trade.TradeValue > imports.topTrade.TradeValue) {
+                        imports.topTrade = trade;
+                    }
+                } else {
+                    imports.topTrade = trade;
+                }
+                imports.total = imports.total + trade.TradeValue
+            } else if (trade.rgDesc == "Export") {
+                if (exports.topTrade) {
+                    if (trade.TradeValue > exports.topTrade.TradeValue) {
+                        exports.topTrade = trade;
+                    }
+                } else {
+                    exports.topTrade = trade;
+                }
+                exports.total = exports.total + trade.TradeValue
+            }
+        }
+    }
+    return {imports: imports, exports: exports}
 }
 
 function showPage() {
@@ -170,89 +211,6 @@ function processWorldTrades(trade) {
         }
         limit++;
     }
-}
-
-function processMapael(plots, links, areas) {
-    $(".mapcontainer").mapael({
-        map: {
-            name: "world_countries",
-            defaultArea: {
-                attrs: {
-                    fill: "#fff",
-                    stroke: "#232323",
-                    "stroke-width": 0.3
-                }
-            }, defaultLink: {
-                factor: 0.4
-                , attrsHover: {
-                    stroke: "#FFEB3B"
-                }
-            },
-            defaultPlot: {
-                text: {
-                    attrs: {
-                        fill: "#b4b4b4"
-                    },
-                    attrsHover: {
-                        fill: "#fff",
-                        "font-weight": "bold"
-                    }
-                }
-            }
-            , zoom: {
-                enabled: false
-                , step: 0.25
-                , maxLevel: 20
-            }
-        },
-        legend: {
-            area: {
-                mode: "horizontal",
-                display: true,
-                labelAttrs: {
-                    "font-size": 12,
-                },
-                marginLeft: 5,
-                marginLeftLabel: 5,
-                slices: [
-                    {
-                        max: 50000000,
-                        attrs: {
-                            fill: "#6aafe1"
-                        },
-                        label: "Less than 50M"
-                    },
-                    {
-                        min: 50000000,
-                        max: 100000000,
-                        attrs: {
-                            fill: "#459bd9"
-                        },
-                        label: "Between 50M and 100M"
-                    },
-                    {
-                        min: 100000000,
-                        max: 500000000,
-                        attrs: {
-                            fill: "#2579b5"
-                        },
-                        label: "Between 100M and 500M"
-                    },
-                    {
-                        min: 500000000,
-                        attrs: {
-                            fill: "#1a527b"
-                        },
-                        label: "More than 500M"
-                    }
-                ]
-            }
-        },
-        plots: plots,
-        // Links allow you to connect plots between them
-        links: links,
-        areas: areas
-    });
 }
 
 function getLoc(code) {

@@ -37,3 +37,86 @@ function insertTableHeader(table, headData) {
 function insertTableRow(table, rowData) {
     $(table + " tbody").append("<tr><td>" + rowData[0] + "</td><td>" + rowData[1] + "</td></tr>")
 }
+
+function processMapael(plots, links, areas) {
+    $(".mapcontainer").mapael({
+        map: {
+            name: "world_countries",
+            defaultArea: {
+                attrs: {
+                    fill: "#fff",
+                    stroke: "#232323",
+                    "stroke-width": 0.3
+                }
+            }, defaultLink: {
+                factor: 0.4
+                , attrsHover: {
+                    stroke: "#FFEB3B"
+                }
+            },
+            defaultPlot: {
+                text: {
+                    attrs: {
+                        fill: "#b4b4b4"
+                    },
+                    attrsHover: {
+                        fill: "#fff",
+                        "font-weight": "bold"
+                    }
+                }
+            }
+            , zoom: {
+                enabled: false
+                , step: 0.25
+                , maxLevel: 20
+            }
+        },
+        legend: {
+            area: {
+                mode: "horizontal",
+                display: true,
+                labelAttrs: {
+                    "font-size": 12,
+                },
+                marginLeft: 5,
+                marginLeftLabel: 5,
+                slices: [
+                    {
+                        max: 50000000,
+                        attrs: {
+                            fill: "#6aafe1"
+                        },
+                        label: "Less than 50M"
+                    },
+                    {
+                        min: 50000000,
+                        max: 100000000,
+                        attrs: {
+                            fill: "#459bd9"
+                        },
+                        label: "Between 50M and 100M"
+                    },
+                    {
+                        min: 100000000,
+                        max: 500000000,
+                        attrs: {
+                            fill: "#2579b5"
+                        },
+                        label: "Between 100M and 500M"
+                    },
+                    {
+                        min: 500000000,
+                        attrs: {
+                            fill: "#1a527b"
+                        },
+                        label: "More than 500M"
+                    }
+                ]
+            }
+        },
+        plots: plots,
+        // Links allow you to connect plots between them
+        links: links,
+        areas: areas
+    });
+}
