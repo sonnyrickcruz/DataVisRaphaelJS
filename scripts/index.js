@@ -1,5 +1,6 @@
 
 var locations;
+var commodities;
 
 $(document).ready(function () {
     init();
@@ -35,6 +36,15 @@ function init() {
                 locations[arr.alpha3Code] = arr;
                 if (comtradeLocs[arr.numericCode])
                     $("#countries").append($(new Option("value", arr.alpha3Code)).html(arr.name));
+            }
+        }
+    })
+    $.getJSON("scripts/CommodityHSCodes.json", function (result) {
+        commodities = result;
+        $("#commodities").append($(new Option("value", null)).html("All"));
+        for (let key of Object.keys(commodities)) {
+            if (commodities[key]) {
+                $("#commodities").append($(new Option("value", key)).html(commodities[key].desc.substring(0, 40)));
             }
         }
     })

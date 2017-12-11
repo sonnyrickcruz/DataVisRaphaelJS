@@ -25,12 +25,13 @@
             <form id="filterForm" class="col-lg-12 form-inline row">
                 <div class="mx-auto">Country: <select class="form-control" id="countries"></select></div>
                 <div class="mx-auto">Year: <select class="form-control" id="year"></select></div>
+                <div class="mx-auto">Commodity: <select class="form-control" id="commodities"></select></div>
                 <div class="mx-auto"><button class="btn btn-primary" type="submit">Filter</button></div>
             </form>
         </div>
         <div id="mainContent" class="animate-bottom text-center">
             <div class="mapcontainer">
-                <div class="map"> <h1 class="display-4 py-5 my-5 w-50 mx-auto">Select a country and year then click filter button to generate results.</h1></div>
+                <div class="map"> <h1 class="display-4 py-5 my-5 w-50 mx-auto">Select a country, year and comodity then click filter button to generate results.</h1></div>
 
                 <div class="areaLegend">
                 </div>
@@ -58,18 +59,16 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js" charset="utf-8"></script>
+    <script src="./plugins/jQuery-Mapael2/js/jquery.mapael.js" charset="utf-8"></script>
+    <script src="./plugins/jQuery-Mapael2/js/maps/world_countries.js" charset="utf-8"></script>
+    <script src="./scripts/scripts.js"></script>
+    <script src="./scripts/index.js"></script>
 </body>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" charset="utf-8"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-    crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-    crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js" charset="utf-8"></script>
-<script src="./plugins/jQuery-Mapael2/js/jquery.mapael.js" charset="utf-8"></script>
-<script src="./plugins/jQuery-Mapael2/js/maps/world_countries.js" charset="utf-8"></script>
-<script src="./scripts/scripts.js"></script>
-<script src="./scripts/index.js"></script>
-
 </html>
