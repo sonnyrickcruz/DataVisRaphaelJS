@@ -94,7 +94,7 @@ function processData(location, year) {
                         areas[des.alpha2Code] = {
                             "value": datum.TradeValue,
                             "tooltip": {
-                                "content": "<div class='font-weight-bold'>" + datum.ptTitle + "</div> <div class='font-weight-bold'>Top Commodity:</div> " + topTrade.cmdDescE + " <div class='font-weight-bold'>Total Trade Value :</div> $" + datum.TradeValue.toLocaleString('en', {useGrouping:true})
+                                "content": "<div class='font-weight-bold'>" + datum.ptTitle + "</div> <div class='font-weight-bold'>Top Commodity:</div> " + topTrade.cmdDescE + " <div class='font-weight-bold'>Total Trade Value :</div> $" + abbreviateNumber(datum.TradeValue)
                             }
                         }
 
@@ -140,12 +140,12 @@ function processCountryTrades(trade) {
     var sortedWorldTrades = sortTrade(trade)
 
     clearTable(tableId)
-    setTitle(tableId, title)
+    setTableTitle(tableId, title)
     insertTableHeader(tableId, ["Commodity", "Value ($)"])
     for (let trade of sortedWorldTrades) {
         if (trade.pt3ISO != "WLD")
         if (limit < 5) {
-            insertTableRow(tableId, [trade.ptTitle, trade.TradeValue]);
+            insertTableRow(tableId, [trade.ptTitle, abbreviateNumber(trade.TradeValue)]);
             limit++;
         } else {
             break;
@@ -160,35 +160,16 @@ function processWorldTrades(trade) {
     var sortedWorldTrades = sortTrade(trade.trades)
 
     clearTable(tableId)
-    setTitle(tableId, title)
+    setTableTitle(tableId, title)
     insertTableHeader(tableId, ["Commodity", "Value ($)"])
     for (let trade of sortedWorldTrades) {
         if (limit < 5) {
-            insertTableRow(tableId, [trade.cmdDescE, trade.TradeValue]);
+            insertTableRow(tableId, [trade.cmdDescE, abbreviateNumber(trade.TradeValue)]);
         } else {
             break;
         }
         limit++;
     }
-}
-
-function clearTable(table) {
-    tableRows = $(table + " > tbody tr")
-    tableRows.empty()
-    tableRows = $(table + " > thead tr")
-    tableRows.empty()
-}
-
-function setTitle(tableId, title) {
-    $(tableId).parent().children(".title").replaceWith("<h2 class='display-5'>" + title + "</h2>")
-}
-
-function insertTableHeader(table, headData) {
-    $(table + " thead").append("<tr><th>" + headData[0] + "</th><th>" + headData[1].toLocaleString('en', {useGrouping:true}) + "</th></tr>")
-}
-
-function insertTableRow(table, rowData) {
-    $(table + " tbody").append("<tr><td>" + rowData[0] + "</td><td>" + rowData[1].toLocaleString('en', {useGrouping:true}) + "</td></tr>")
 }
 
 function processMapael(plots, links, areas) {
@@ -263,57 +244,6 @@ function processMapael(plots, links, areas) {
                             fill: "#1a527b"
                         },
                         label: "More than 500M"
-                    }
-                ]
-            },
-            plot: {
-                mode: "horizontal",
-                display: false,
-                title: "City population",
-                marginBottom: 6,
-                slices: [
-                    {
-                        type: "circle",
-                        max: 500000,
-                        attrs: {
-                            fill: "#FD4851",
-                            "stroke-width": 1
-                        },
-                        attrsHover: {
-                            transform: "s1.5",
-                            "stroke-width": 1
-                        },
-                        label: "Less than 500 000",
-                        size: 10
-                    },
-                    {
-                        type: "circle",
-                        min: 500000,
-                        max: 1000000,
-                        attrs: {
-                            fill: "#FD4851",
-                            "stroke-width": 1
-                        },
-                        attrsHover: {
-                            transform: "s1.5",
-                            "stroke-width": 1
-                        },
-                        label: "Between 500 000 and 1M",
-                        size: 20
-                    },
-                    {
-                        type: "circle",
-                        min: 1000000,
-                        attrs: {
-                            fill: "#FD4851",
-                            "stroke-width": 1
-                        },
-                        attrsHover: {
-                            transform: "s1.5",
-                            "stroke-width": 1
-                        },
-                        label: "More than 1M",
-                        size: 30
                     }
                 ]
             }
