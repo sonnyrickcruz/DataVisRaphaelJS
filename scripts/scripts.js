@@ -27,11 +27,11 @@ function clearTable(table) {
 }
 
 function setTableTitle(tableId, title) {
-    $(tableId).parent().children(".title").replaceWith("<h2 class='display-5'>" + title + "</h2>")
+    $(tableId).parent().children(".title").text(title)
 }
 
 function insertTableHeader(table, headData) {
-    $(table + " thead").append("<tr><th>" + headData[0] + "</th><th>" + headData[1] + "</th></tr>")
+    $(table + " thead").append("<tr><th>" + headData[0] + "</th><th class='w-25'>" + headData[1] + "</th></tr>")
 }
 
 function insertTableRow(table, rowData) {

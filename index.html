@@ -22,37 +22,66 @@
         </nav>
         <div id="loader"></div>
         <div class="col-lg-12 filters">
-            <form id="filterForm" class="col-lg-12 form-inline row">
-                <div class="mx-auto">Country: <select class="form-control" id="countries"></select></div>
-                <div class="mx-auto">Year: <select class="form-control" id="year"></select></div>
-                <div class="mx-auto">Commodity: <select class="form-control" id="commodities"></select></div>
-                <div class="mx-auto"><button class="btn btn-primary" type="submit">Filter</button></div>
+            <form id="filterForm" class="col-lg-12 form-inline row animate-bottom">
+                <div class="mx-auto">Country:
+                    <select class="form-control" id="countries"></select>
+                </div>
+                <div class="mx-auto">Year:
+                    <select class="form-control" id="year"></select>
+                </div>
+                <div class="mx-auto">Commodity:
+                    <select class="form-control" id="commodities"></select>
+                </div>
+                <div class="mx-auto">
+                    <button class="btn btn-primary" type="submit">Filter</button>
+                </div>
             </form>
+        </div>
+        <div class="text-center" id="messaging">
+            <h1 class="display-4 py-5 my-5 w-50 mx-auto animate-bottom">Select a country, year and comodity then click filter button to generate results.</h1>        
         </div>
         <div id="mainContent" class="animate-bottom text-center">
             <div class="mapcontainer">
-                <div class="map"> <h1 class="display-4 py-5 my-5 w-50 mx-auto">Select a country, year and comodity then click filter button to generate results.</h1></div>
-
-                <div class="areaLegend">
-                </div>
+                <div class="map"></div>
+                <div class="areaLegend"></div>
                 <div class="plotLegend"></div>
             </div>
-            <div class="row col-lg-12 p-0 mx-0 my-5">
-                <div class="col-lg-6">
-                    <div class="title"></div>
-                    <table class="table table-striped" id="worldTrade">
+            <div class="row col-lg-12 p-0 mx-0 my-5 stats">
+                <div class="col-lg-12"><h1 class="display-5">Top 5 Comodities (World)</h1></div>
+                <div class="card col-lg-6 p-0 mx-auto">
+                    <div class="card-header title"></div>
+                    <table class="table table-striped" id="worldTradeImports">
                         <thead>
                         </thead>
-                        <tbody class="tbody">
+                        <tbody>
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-6">
-                    <div class="title"></div>
-                    <table class="table table-striped" id="countryTrade">
+                <div class="card col-lg-6 p-0 mx-auto">
+                    <div class="card-header title"></div>
+                    <table class="table table-striped" id="worldTradeExports">
                         <thead>
                         </thead>
-                        <tbody class="tbody">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-12"><h1 class="display-5 pt-5">Top 5 Partner Countries</h1></div>
+                <div class="card col-lg-6 p-0 mx-auto">
+                    <div class="card-header title"></div>
+                    <table class="table table-striped" id="countryTradeImports">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card col-lg-6 p-0 mx-auto">
+                    <div class="card-header title"></div>
+                    <table class="table table-striped" id="countryTradeExports">
+                        <thead>
+                        </thead>
+                        <tbody>
                         </tbody>
                     </table>
                 </div>
@@ -66,9 +95,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js" charset="utf-8"></script>
-    <script src="./plugins/jQuery-Mapael2/js/jquery.mapael.js" charset="utf-8"></script>
-    <script src="./plugins/jQuery-Mapael2/js/maps/world_countries.js" charset="utf-8"></script>
+    <script src="./plugins/jQuery-Mapael-2.1.0/js/jquery.mapael.js" charset="utf-8"></script>
+    <script src="./plugins/jQuery-Mapael-2.1.0/js/maps/world_countries.js" charset="utf-8"></script>
     <script src="./scripts/scripts.js"></script>
     <script src="./scripts/index.js"></script>
 </body>
+
 </html>

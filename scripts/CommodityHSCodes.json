@@ -9,11 +9,11 @@
     },
     "2": {
       "code": 2,
-      "desc": "Crude materials, inedible, except fuels"
+      "desc": "Crude materials"
     },
     "3": {
       "code": 3,
-      "desc": "Mineral fuels, lubricants and related materials"
+      "desc": "Mineral fuels and lubricants"
     },
     "4": {
       "code": 4,
@@ -37,7 +37,7 @@
     },
     "9": {
       "code": 9,
-      "desc": "Commodities and transactions not classified elsewhere in the SITC"
+      "desc": "Commodities and transactions not classified"
     },
     "10": {
       "code": 10,
@@ -45,27 +45,27 @@
     },
     "11": {
       "code": 11,
-      "desc": "Products of the milling industry; malt, starches, inulin, wheat gluten"
+      "desc": "Products of the milling industry"
     },
     "12": {
       "code": 12,
-      "desc": "Oil seeds and oleaginous fruits; miscellaneous grains, seeds and fruit, industrial or medicinal plants; straw and fodder"
+      "desc": "Oil seeds and oleaginous fruits"
     },
     "13": {
       "code": 13,
-      "desc": "Lac; gums, resins and other vegetable saps and extracts"
+      "desc": "Lac and other vegetable saps and extracts"
     },
     "14": {
       "code": 14,
-      "desc": "Vegetable plaiting materials; vegetable products not elsewhere specified or included"
+      "desc": "vegetable products not elsewhere specified or included"
     },
     "15": {
       "code": 15,
-      "desc": "Animal or vegetable fats and oils and their cleavage products; prepared animal fats; animal or vegetable waxes"
+      "desc": "Prepared animal fats; animal or vegetable waxes"
     },
     "16": {
       "code": 16,
-      "desc": "Meat, fish or crustaceans, molluscs or other aquatic invertebrates; preparations thereof"
+      "desc": "Meat, fish or crustaceans, molluscs or other aquatic invertebrates"
     },
     "17": {
       "code": 17,
@@ -109,11 +109,11 @@
     },
     "27": {
       "code": 27,
-      "desc": "Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes"
+      "desc": "Mineral fuels, mineral oils and products of their distillation"
     },
     "28": {
       "code": 28,
-      "desc": "Inorganic chemicals; organic and inorganic compounds of precious metals; of rare earth metals, of radio-active elements and of isotopes"
+      "desc": "Inorganic chemicals; organic and inorganic compounds of precious metals"
     },
     "29": {
       "code": 29,
@@ -129,7 +129,7 @@
     },
     "32": {
       "code": 32,
-      "desc": "Tanning or dyeing extracts; tannins and their derivatives; dyes, pigments and other colouring matter; paints, varnishes; putty, other mastics; inks"
+      "desc": "Tanning or dyeing extracts; tannins and their derivatives"
     },
     "33": {
       "code": 33,
@@ -137,7 +137,7 @@
     },
     "34": {
       "code": 34,
-      "desc": "Soap, organic surface-active agents; washing, lubricating, polishing or scouring preparations; artificial or prepared waxes, candles and similar articles, modelling pastes, dental waxes and dental preparations with a basis of plaster"
+      "desc": "Soap, organic surface-active agents"
     },
     "35": {
       "code": 35,
@@ -145,7 +145,7 @@
     },
     "36": {
       "code": 36,
-      "desc": "Explosives; pyrotechnic products; matches; pyrophoric alloys; certain combustible preparations"
+      "desc": "Explosives; pyrotechnic products; matches; pyrophoric alloys"
     },
     "37": {
       "code": 37,
@@ -169,7 +169,7 @@
     },
     "42": {
       "code": 42,
-      "desc": "Articles of leather; saddlery and harness; travel goods, handbags and similar containers; articles of animal gut (other than silk-worm gut)"
+      "desc": "Articles of leather; saddlery and harness; travel goods"
     },
     "43": {
       "code": 43,
@@ -185,11 +185,11 @@
     },
     "46": {
       "code": 46,
-      "desc": "Manufactures of straw, esparto or other plaiting materials; basketware and wickerwork"
+      "desc": "Manufactures of straw, esparto or other plaiting materials"
     },
     "47": {
       "code": 47,
-      "desc": "Pulp of wood or other fibrous cellulosic material; recovered (waste and scrap) paper or paperboard"
+      "desc": "Pulp of wood or other fibrous cellulosic material"
     },
     "48": {
       "code": 48,
@@ -197,7 +197,7 @@
     },
     "49": {
       "code": 49,
-      "desc": "Printed books, newspapers, pictures and other products of the printing industry; manuscripts, typescripts and plans"
+      "desc": "products of the printing industry; manuscripts, typescripts and plans"
     },
     "50": {
       "code": 50,
@@ -225,7 +225,7 @@
     },
     "56": {
       "code": 56,
-      "desc": "Wadding, felt and nonwovens, special yarns; twine, cordage, ropes and cables and articles thereof"
+      "desc": "Wadding, felt and nonwovens, special yarns"
     },
     "57": {
       "code": 57,
@@ -233,11 +233,11 @@
     },
     "58": {
       "code": 58,
-      "desc": "Fabrics; special woven fabrics, tufted textile fabrics, lace, tapestries, trimmings, embroidery"
+      "desc": "Fabrics; special woven fabrics"
     },
     "59": {
       "code": 59,
-      "desc": "Textile fabrics; impregnated, coated, covered or laminated; textile articles of a kind suitable for industrial use"
+      "desc": "Textile fabrics; impregnated, coated, covered or laminated"
     },
     "60": {
       "code": 60,
@@ -269,7 +269,7 @@
     },
     "67": {
       "code": 67,
-      "desc": "Feathers and down, prepared; and articles made of feather or of down; artificial flowers; articles of human hair"
+      "desc": "Feathers and down, prepared; artificial flowers; articles of human hair"
     },
     "68": {
       "code": 68,

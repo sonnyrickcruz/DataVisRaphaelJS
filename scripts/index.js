@@ -1,6 +1,7 @@
 
 var locations;
 var commodities;
+var countrySelection;
 
 $(document).ready(function () {
     init();
@@ -9,12 +10,13 @@ $(document).ready(function () {
         if (val) {
             processData(locations[this.countries.value], this.year.value)
         } else {
-            alert ("Please select a Country")
+            alert("Please select a Country")
         }
         return false;
     })
 });
 function init() {
+    document.getElementById("mainContent").style.display = "none";
     maxYear = 2016;
     startYear = 2010;
 
@@ -30,8 +32,9 @@ function init() {
             comtradeLocs[("00" + arr.id).slice(-3)] = arr;
         }
     })
-    $.getJSON("scripts/restCountries3.json", function (result) {
-        for (let arr of result) {
+    $.getJSON("scripts/restCountries3.5.json", function (result) {
+        countrySelection = result;
+        for (let arr of countrySelection) {
             if (arr.latlng && arr.latlng[0] && arr.latlng[1]) {
                 locations[arr.alpha3Code] = arr;
                 if (comtradeLocs[arr.numericCode])
@@ -39,12 +42,12 @@ function init() {
             }
         }
     })
-    $.getJSON("scripts/CommodityHSCodes.json", function (result) {
+    $.getJSON("scripts/CommodityHSCodes.2.json", function (result) {
         commodities = result;
         $("#commodities").append($(new Option("value", null)).html("All"));
         for (let key of Object.keys(commodities)) {
             if (commodities[key]) {
-                $("#commodities").append($(new Option("value", key)).html(commodities[key].desc.substring(0, 40)));
+                $("#commodities").append($(new Option("value", key)).html(commodities[key].desc));
             }
         }
     })
@@ -54,12 +57,12 @@ function processData(location, year) {
     var ajaxLink = "./scripts/mockdata.json"
     if (location && year) {
         hidePage()
-        ajaxLink = "https://comtrade.un.org/api/get?r=" + location.numericCode + "&px=HS&ps=" + year + "&type=C&freq=A"
+        //ajaxLink = "https://comtrade.un.org/api/get?r=" + location.numericCode + "&px=HS&ps=" + year + "&type=C&freq=A"
+        location = locations["CHN"]
     }
     $.ajax({
         url: ajaxLink, success: function (result) {
             var partnerCountriesMap = parsePartnerCountries(result);
-            var trades = getTrades(result);
             var groupedTrades = groupTrades(result);
             var partnerCountriesList = [];
             Object.entries(partnerCountriesMap).forEach(([key, value]) => {
@@ -97,21 +100,22 @@ function processData(location, year) {
                         plots[datum.pt3ISO] = {
                             latitude: des.latlng[0],
                             longitude: des.latlng[1],
-                            tooltip: { content: datum.ptTitle },
                             size: 0
                         }
                         var topTrade = datum.trades[0]
                         areas[des.alpha2Code] = {
                             "value": datum.TradeValue,
                             "tooltip": {
-                                "content": "<div class='font-weight-bold'>" + datum.ptTitle + "</div> <div class='font-weight-bold'>Top Commodity:</div> " + topTrade.cmdDescE + " <div class='font-weight-bold'>Total Trade Value :</div> $" + abbreviateNumber(datum.TradeValue)
+                                "content": "<div class='font-weight-bold'>" + datum.ptTitle +
+                                    "</div> <div class='font-weight-bold'>Top Commodity:</div> " + topTrade.cmdDescE +
+                                    " <div class='font-weight-bold'>Total Trade Value :</div> $" + abbreviateNumber(datum.TradeValue)
                             }
                         }
 
                         if (count > 0) {
                             var countryTopTrade = getTopTradesPerCountry(datum.trades)
-                            if (des.alpha3Code != "USA" && des.alpha3Code != "FRA")
-                                areas[des.alpha2Code].text = { content: datum.ptTitle, attrs: { "font-size": 10 } };
+                            //if (des.alpha3Code != "USA" && des.alpha3Code != "FRA")
+                            plots[datum.pt3ISO].text = { content: datum.ptTitle, attrs: { "font-size": 10 } };
                             links[datum.pt3ISO + datum.rt3ISO] = {
                                 factor: -.4,
                                 between: [datum.rt3ISO, datum.pt3ISO],
@@ -121,12 +125,14 @@ function processData(location, year) {
                                     "stroke-linecap": "round",
                                     "arrow-end": "block",
                                     opacity: .9
-                                }, tooltip: { content: "<div class='font-weight-bold'> Top Import </div>" +  countryTopTrade.imports.topTrade.cmdDescE + 
-                                                        "</br> <span class='font-weight-bold'> Total Value: </span>" + abbreviateNumber(countryTopTrade.imports.total) +
-                                                        "<div class='font-weight-bold'> Top Export </div>" +  countryTopTrade.exports.topTrade.cmdDescE + 
-                                                        "</br> <span class='font-weight-bold'> Total Value: </span>" + abbreviateNumber(countryTopTrade.exports.total)}
+                                }, tooltip: {
+                                    content: "<div class='font-weight-bold'> " + datum.rt3ISO + " To " + datum.pt3ISO + "</div>" +
+                                        "<div class='font-weight-bold'> Top Import </div>" + commodities[countryTopTrade.imports.topTrade.cmdCode].desc +
+                                        "</br> <span class='font-weight-bold'> Total Value: $ </span>" + abbreviateNumber(countryTopTrade.imports.total) +
+                                        "<div class='font-weight-bold'> Top Export </div>" + commodities[countryTopTrade.exports.topTrade.cmdCode].desc +
+                                        "</br> <span class='font-weight-bold'> Total Value: $ </span>" + abbreviateNumber(countryTopTrade.exports.total)
+                                }
                             }
-                            console.log(countryTopTrade)
                             count--;
                         }
                     }
@@ -138,42 +144,6 @@ function processData(location, year) {
     });
 }
 
-function getTopTradesPerCountry(trades) {
-    console.log(trades)
-    imports = {
-        total: 0,
-        topTrade: null
-    }
-    exports = {
-        total: 0,
-        topTrade: null
-    }
-    for (let trade of trades) {
-        if (trade.rgDesc) {
-            if (trade.rgDesc == "Import") {
-                if (imports.topTrade) {
-                    if (trade.TradeValue > imports.topTrade.TradeValue) {
-                        imports.topTrade = trade;
-                    }
-                } else {
-                    imports.topTrade = trade;
-                }
-                imports.total = imports.total + trade.TradeValue
-            } else if (trade.rgDesc == "Export") {
-                if (exports.topTrade) {
-                    if (trade.TradeValue > exports.topTrade.TradeValue) {
-                        exports.topTrade = trade;
-                    }
-                } else {
-                    exports.topTrade = trade;
-                }
-                exports.total = exports.total + trade.TradeValue
-            }
-        }
-    }
-    return {imports: imports, exports: exports}
-}
-
 function showPage() {
     document.getElementById("loader").style.display = "none";
     document.getElementById("mainContent").style.display = "block";
@@ -181,47 +151,117 @@ function showPage() {
 
 function hidePage() {
     document.getElementById("loader").style.display = "block";
+    document.getElementById("messaging").style.display = "none";
     document.getElementById("mainContent").style.display = "none";
 }
 
 function processCountryTrades(trade) {
-    var title = "Top 5 Country Trades";
-    var tableId = "#countryTrade";
+    // TODO: Top 5 imports and exports
+    var title = "Exports";
+    var tableId = "#countryTradeExports";
     var limit = 0;
-    var sortedWorldTrades = sortTrade(trade)
+    var sortedWorldTrades = groupTradeFlows(trade)
+    var commodityName;
+
+    clearTable(tableId)
+    setTableTitle(tableId, title)
+    insertTableHeader(tableId, ["Country", "Value ($)"])
+    for (let trade of sortedWorldTrades.exports) {
+        if (trade.pt3ISO != "WLD")
+            if (limit < 5) {
+                console.log(locations[trade.pt3ISO])
+                if (locations[trade.pt3ISO]) {
+                    commodityName = locations[trade.pt3ISO].name;
+                } else {
+                    commodityName = trade.ptTitle;
+                }
+                insertTableRow(tableId, [commodityName, abbreviateNumber(trade.TradeValue)]);
+                limit++;
+            } else {
+                break;
+            }
+    }
+
+    title = "Imports";
+    tableId = "#countryTradeImports";
+    limit = 0;
+    sortedWorldTrades = groupTradeFlows(trade)
+    commodityName;
+
+    clearTable(tableId)
+    setTableTitle(tableId, title)
+    insertTableHeader(tableId, ["Country", "Value ($)"])
+    for (let trade of sortedWorldTrades.imports) {
+        if (trade.pt3ISO != "WLD")
+            if (limit < 5) {
+                console.log(locations[trade.pt3ISO])
+                if (locations[trade.pt3ISO]) {
+                    commodityName = locations[trade.pt3ISO].name;
+                } else {
+                    commodityName = trade.ptTitle;
+                }
+                insertTableRow(tableId, [commodityName, abbreviateNumber(trade.TradeValue)]);
+                limit++;
+            } else {
+                break;
+            }
+    }
+}
+function processWorldTrades(trade) {
+    // TODO: Top 5 imports and exports
+    var title = "Imports";
+    var tableId = "#worldTradeImports";
+    var limit = 0;
+    var worldTrades = groupTradeFlows(trade.trades)
 
     clearTable(tableId)
     setTableTitle(tableId, title)
     insertTableHeader(tableId, ["Commodity", "Value ($)"])
-    for (let trade of sortedWorldTrades) {
-        if (trade.pt3ISO != "WLD")
+    for (let trade of sortTrade(worldTrades.imports)) {
         if (limit < 5) {
-            insertTableRow(tableId, [trade.ptTitle, abbreviateNumber(trade.TradeValue)]);
-            limit++;
+            insertTableRow(tableId, [commodities[parseInt(trade.cmdCode)].desc, abbreviateNumber(trade.TradeValue)]);
         } else {
             break;
         }
+        limit++;
     }
-}
 
-function processWorldTrades(trade) {
-    var title = "Top 5 World Trades";
-    var tableId = "#worldTrade";
-    var limit = 0;
-    var sortedWorldTrades = sortTrade(trade.trades)
+    title = "Exports";
+    tableId = "#worldTradeExports";
+    limit = 0;
+    worldTrades = groupTradeFlows(trade.trades)
 
     clearTable(tableId)
     setTableTitle(tableId, title)
     insertTableHeader(tableId, ["Commodity", "Value ($)"])
-    for (let trade of sortedWorldTrades) {
+    for (let trade of sortTrade(worldTrades.exports)) {
         if (limit < 5) {
-            insertTableRow(tableId, [trade.cmdDescE, abbreviateNumber(trade.TradeValue)]);
+            insertTableRow(tableId, [commodities[parseInt(trade.cmdCode)].desc, abbreviateNumber(trade.TradeValue)]);
         } else {
             break;
         }
         limit++;
     }
 }
+
+function groupTradeFlows(trades) {
+    var result = {
+        imports: [],
+        exports: []
+    }
+
+    for (let trade of trades) {
+        if (trade)
+        if (trade.rgDesc == 'Import') {
+            result.imports.push(trade);
+        } else if (trade.rgDesc == 'Export') {
+            result.exports.push(trade)
+        }
+    }
+
+    return result;
+}
+
 
 function getLoc(code) {
     var locArray = locations[code];
@@ -293,26 +333,6 @@ function sortTrade(partnerCountriesList) {
     return partnerCountriesList;
 }
 
-function getTrades(data) {
-    var trades = new Map();
-    for (let datum of data.dataset) {
-        if (datum.rgDesc) {
-            if (!trades[datum.pt3ISO]) {
-                trades[datum.pt3ISO] = {
-                    imports: [],
-                    exports: []
-                };
-            }
-            if (datum.rgDesc == "Import") {
-                trades[datum.pt3ISO].imports.push(datum)
-            } else if (datum.rgDesc == "Export") {
-                trades[datum.pt3ISO].exports.push(datum)
-            }
-        }
-    }
-    return trades;
-}
-
 function groupTrades(data) {
     var trades = [];
     for (let datum of data.dataset) {
@@ -334,4 +354,41 @@ function groupTrades(data) {
         trades[datum.cmdCode].TradeValue = trades[datum.cmdCode].TradeValue + datum.TradeValue
     }
     return trades;
+}
+
+
+function getTopTradesPerCountry(trades) {
+    console.log(trades)
+    imports = {
+        total: 0,
+        topTrade: null
+    }
+    exports = {
+        total: 0,
+        topTrade: null
+    }
+    for (let trade of trades) {
+        if (trade.rgDesc) {
+            if (trade.rgDesc == "Import") {
+                if (imports.topTrade) {
+                    if (trade.TradeValue > imports.topTrade.TradeValue) {
+                        imports.topTrade = trade;
+                    }
+                } else {
+                    imports.topTrade = trade;
+                }
+                imports.total = imports.total + trade.TradeValue
+            } else if (trade.rgDesc == "Export") {
+                if (exports.topTrade) {
+                    if (trade.TradeValue > exports.topTrade.TradeValue) {
+                        exports.topTrade = trade;
+                    }
+                } else {
+                    exports.topTrade = trade;
+                }
+                exports.total = exports.total + trade.TradeValue
+            }
+        }
+    }
+    return {imports: imports, exports: exports}
 }
