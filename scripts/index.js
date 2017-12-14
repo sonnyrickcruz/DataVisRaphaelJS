@@ -8,7 +8,7 @@ $(document).ready(function () {
     $(document).on("submit", "#filterForm", function () {
         var val = locations[this.countries.value];
         if (val) {
-            processData(locations[this.countries.value], this.year.value)
+            processData(locations[this.countries.value], this.year.value, this.commodities.value)
         } else {
             alert("Please select a Country")
         }
@@ -53,7 +53,8 @@ function init() {
     })
 }
 
-function processData(location, year) {
+function processData(location, year, commodity) {
+    console.log(commodity)
     var ajaxLink = "./scripts/mockdata.json"
     if (location && year) {
         hidePage()
@@ -62,7 +63,7 @@ function processData(location, year) {
     }
     $.ajax({
         url: ajaxLink, success: function (result) {
-            var partnerCountriesMap = parsePartnerCountries(result);
+            var partnerCountriesMap = parsePartnerCountries(result, commodity);
             var groupedTrades = groupTrades(result);
             var partnerCountriesList = [];
             Object.entries(partnerCountriesMap).forEach(([key, value]) => {
@@ -154,7 +155,6 @@ function hidePage() {
     document.getElementById("messaging").style.display = "none";
     document.getElementById("mainContent").style.display = "none";
 }
-
 function processCountryTrades(trade) {
     // TODO: Top 5 imports and exports
     var title = "Exports";
@@ -165,17 +165,16 @@ function processCountryTrades(trade) {
 
     clearTable(tableId)
     setTableTitle(tableId, title)
-    insertTableHeader(tableId, ["Country", "Value ($)"])
+    insertTableHeader(tableId, ["Country", "Total ($)", "%"])
     for (let trade of sortedWorldTrades.exports) {
         if (trade.pt3ISO != "WLD")
             if (limit < 5) {
-                console.log(locations[trade.pt3ISO])
                 if (locations[trade.pt3ISO]) {
                     commodityName = locations[trade.pt3ISO].name;
                 } else {
                     commodityName = trade.ptTitle;
                 }
-                insertTableRow(tableId, [commodityName, abbreviateNumber(trade.TradeValue)]);
+                insertTableRow(tableId, [commodityName, abbreviateNumber(trade.TradeValue), getPercentage(trade.TradeValue, sortedWorldTrades.exportsTotal)]);
                 limit++;
             } else {
                 break;
@@ -185,22 +184,20 @@ function processCountryTrades(trade) {
     title = "Imports";
     tableId = "#countryTradeImports";
     limit = 0;
-    sortedWorldTrades = groupTradeFlows(trade)
     commodityName;
 
     clearTable(tableId)
     setTableTitle(tableId, title)
-    insertTableHeader(tableId, ["Country", "Value ($)"])
+    insertTableHeader(tableId, ["Country", "Total ($)", "%"])
     for (let trade of sortedWorldTrades.imports) {
         if (trade.pt3ISO != "WLD")
             if (limit < 5) {
-                console.log(locations[trade.pt3ISO])
                 if (locations[trade.pt3ISO]) {
                     commodityName = locations[trade.pt3ISO].name;
                 } else {
                     commodityName = trade.ptTitle;
                 }
-                insertTableRow(tableId, [commodityName, abbreviateNumber(trade.TradeValue)]);
+                insertTableRow(tableId, [commodityName, abbreviateNumber(trade.TradeValue), getPercentage(trade.TradeValue, sortedWorldTrades.importsTotal)]);
                 limit++;
             } else {
                 break;
@@ -213,13 +210,14 @@ function processWorldTrades(trade) {
     var tableId = "#worldTradeImports";
     var limit = 0;
     var worldTrades = groupTradeFlows(trade.trades)
+    console.log(worldTrades)
 
     clearTable(tableId)
     setTableTitle(tableId, title)
-    insertTableHeader(tableId, ["Commodity", "Value ($)"])
+    insertTableHeader(tableId, ["Commodity", "Total ($)", "%"])
     for (let trade of sortTrade(worldTrades.imports)) {
         if (limit < 5) {
-            insertTableRow(tableId, [commodities[parseInt(trade.cmdCode)].desc, abbreviateNumber(trade.TradeValue)]);
+            insertTableRow(tableId, [commodities[parseInt(trade.cmdCode)].desc, abbreviateNumber(trade.TradeValue), getPercentage(trade.TradeValue, worldTrades.importsTotal)]);
         } else {
             break;
         }
@@ -229,14 +227,13 @@ function processWorldTrades(trade) {
     title = "Exports";
     tableId = "#worldTradeExports";
     limit = 0;
-    worldTrades = groupTradeFlows(trade.trades)
 
     clearTable(tableId)
     setTableTitle(tableId, title)
-    insertTableHeader(tableId, ["Commodity", "Value ($)"])
+    insertTableHeader(tableId, ["Commodity", "Total ($)", "%"])
     for (let trade of sortTrade(worldTrades.exports)) {
         if (limit < 5) {
-            insertTableRow(tableId, [commodities[parseInt(trade.cmdCode)].desc, abbreviateNumber(trade.TradeValue)]);
+            insertTableRow(tableId, [commodities[parseInt(trade.cmdCode)].desc, abbreviateNumber(trade.TradeValue), getPercentage(trade.TradeValue, worldTrades.exportsTotal)]);
         } else {
             break;
         }
@@ -247,15 +244,19 @@ function processWorldTrades(trade) {
 function groupTradeFlows(trades) {
     var result = {
         imports: [],
-        exports: []
+        exports: [],
+        importsTotal: 0,
+        exportsTotal: 0
     }
 
     for (let trade of trades) {
         if (trade)
         if (trade.rgDesc == 'Import') {
             result.imports.push(trade);
+            result.importsTotal = trade.TradeValue + result.importsTotal;
         } else if (trade.rgDesc == 'Export') {
             result.exports.push(trade)
+            result.exportsTotal = trade.TradeValue + result.exportsTotal;
         }
     }
 
@@ -268,7 +269,7 @@ function getLoc(code) {
     return locArray;
 }
 
-function parsePartnerCountries(result) {
+function parsePartnerCountries(result, commodity) {
     var parsedArray = [];
     for (let data of result.dataset) {
         if (parsedArray[data.pt3ISO]) {
@@ -358,7 +359,6 @@ function groupTrades(data) {
 
 
 function getTopTradesPerCountry(trades) {
-    console.log(trades)
     imports = {
         total: 0,
         topTrade: null

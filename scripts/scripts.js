@@ -19,6 +19,10 @@ function abbreviateNumber(number){
     return scaled.toFixed(1) + prefix;
 }
 
+function getPercentage(value, total) {
+    return ((value/total) * 100).toFixed(2);
+}
+
 function clearTable(table) {
     tableRows = $(table + " > tbody tr")
     tableRows.empty()
@@ -27,15 +31,30 @@ function clearTable(table) {
 }
 
 function setTableTitle(tableId, title) {
-    $(tableId).parent().children(".title").text(title)
+    let x = $(tableId).parent().children(".title").text(title)
+    if (title == "Imports") {
+        x.prepend('<i class="fas fa-arrow-left"></i> ')
+    } else if (title == "Exports") {
+        x.prepend('<i class="fas fa-arrow-right"></i> ')
+    }
 }
 
 function insertTableHeader(table, headData) {
-    $(table + " thead").append("<tr><th>" + headData[0] + "</th><th class='w-25'>" + headData[1] + "</th></tr>")
+    let tableHeader = "<tr>";
+    for (let head of headData) {
+        tableHeader += "<th>" + head + "</th>"
+    }
+    tableHeader += "</tr>"
+    $(table + " thead").append(tableHeader)
 }
 
 function insertTableRow(table, rowData) {
-    $(table + " tbody").append("<tr><td>" + rowData[0] + "</td><td>" + rowData[1] + "</td></tr>")
+    let tableRows = "<tr>";
+    for (let row of rowData) {
+        tableRows += "<td>" + row + "</td>";
+    }
+    tableRows += "</tr>";
+    $(table + " tbody").append(tableRows)
 }
 
 function processMapael(plots, links, areas) {
