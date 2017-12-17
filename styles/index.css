@@ -121,3 +121,6 @@ table {
     to{ bottom:0; opacity:1 }
   }
   
+  .tab-content > div > .row {
+      font-size: 13px;
+  }

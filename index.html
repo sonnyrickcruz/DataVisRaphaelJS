@@ -38,7 +38,7 @@
             </form>
         </div>
         <div class="text-center" id="messaging">
-            <h1 class="display-4 py-5 my-5 w-50 mx-auto animate-bottom">Select a country, year and comodity then click filter button to generate results.</h1>        
+            <h1 class="display-4 py-5 my-5 w-50 mx-auto animate-bottom">Select a country, year and comodity then click filter button to generate results.</h1>
         </div>
         <div id="mainContent" class="animate-bottom text-center">
             <div class="mapcontainer">
@@ -47,43 +47,87 @@
                 <div class="plotLegend"></div>
             </div>
             <div class="row col-lg-12 p-0 mx-0 my-5 stats">
-                <div class="col-lg-12"><h1 class="display-5">Top 5 Comodities (World)</h1></div>
-                <div class="card col-lg-6 p-0 mx-auto">
-                    <div class="card-header title font-weight-bold"></div>
-                    <table class="table table-striped" id="worldTradeImports">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card col-lg-6 p-0 mx-auto">
-                    <div class="card-header title font-weight-bold"></div>
-                    <table class="table table-striped" id="worldTradeExports">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-lg-12"><h1 class="display-5 pt-5">Top 5 Partner Countries</h1></div>
-                <div class="card col-lg-6 p-0 mx-auto">
-                    <div class="card-header title font-weight-bold"></div>
-                    <table class="table table-striped" id="countryTradeImports">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card col-lg-6 p-0 mx-auto">
-                    <div class="card-header title font-weight-bold"></div>
-                    <table class="table table-striped" id="countryTradeExports">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                <div class="col-lg-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="summaryTab" data-toggle="tab" href="#summaryTabContent" role="tab" aria-controls="summaryTabContent"
+                                aria-selected="true">Summary</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="commoditiesTab" data-toggle="tab" href="#commoditiesTabContent" role="tab" aria-controls="commoditiesTabContent"
+                                aria-selected="true">Top Commodities</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="Partner Countries" data-toggle="tab" href="#countriesTabContent" role="tab" aria-controls="countriesTabContent"
+                                aria-selected="false">Top Partner Countries</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tabContents">
+                        <div class="tab-pane fade show active container-fluid" id="summaryTabContent" role="tabpanel" aria-labelledby="summaryTab">
+                            <div class="row">
+                                <div class="card col-lg-2 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold">Total Value</div>
+                                    <div class="py-auto my-auto">
+                                        <h1 class="display-5" id="totalValue"></h1>
+                                    </div>
+                                </div>
+                                <div class="card col-lg-2 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold">Total Exports</div>
+                                    <div class="py-auto my-auto">
+                                        <h1 class="display-5" id="totalExports"></h1>
+                                    </div>
+                                </div>
+                                <div class="card col-lg-2 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold">Total Imports</div>
+                                    <div class="py-auto my-auto">
+                                        <h1 class="display-5" id="totalImports"></h1>
+                                    </div>
+                                </div>
+                                
+                                <div class="card col-lg-3 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold">Top Trade Country</div>
+                                    <div class="py-auto my-auto">
+                                        <h1 class="display-5" id="topTradeCountry"></h1>
+                                    </div>
+                                </div>
+
+                                <div class="card col-lg-3 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold">Top Trade Commodity</div>
+                                    <div class="py-auto my-auto">
+                                        <h1 class="display-5" id="topTradeCommodity"></h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show container-fluid" id="commoditiesTabContent" role="tabpanel" aria-labelledby="commoditiesTab">
+                            <div class="row">
+                                <div class="card col-lg-6 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold"></div>
+                                    <div id="worldTradeImports">
+                                    </div>
+                                </div>
+                                <div class="card col-lg-6 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold"></div>
+                                    <div id="worldTradeExports">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade container-fluid" id="countriesTabContent" role="tabpanel" aria-labelledby="Partner Countries">
+                            <div class="row">
+                                <div class="card col-lg-6 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold"></div>
+                                    <div id="countryTradeImports">
+                                    </div>
+                                </div>
+                                <div class="card col-lg-6 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold"></div>
+                                    <div id="countryTradeExports">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,12 +1,12 @@
 var SI_PREFIXES = ["", "k", "M", "B", "T", "P", "E"];
 
-function abbreviateNumber(number){
+function abbreviateNumber(number) {
 
     // what tier? (determines SI prefix)
     var tier = Math.log10(number) / 3 | 0;
 
     // if zero, we don't need a prefix
-    if(tier == 0) return number;
+    if (tier == 0) return number;
 
     // get prefix and determine scale
     var prefix = SI_PREFIXES[tier];
@@ -20,7 +20,7 @@ function abbreviateNumber(number){
 }
 
 function getPercentage(value, total) {
-    return ((value/total) * 100).toFixed(2);
+    return ((value / total) * 100).toFixed(2);
 }
 
 function clearTable(table) {
@@ -55,6 +55,19 @@ function insertTableRow(table, rowData) {
     }
     tableRows += "</tr>";
     $(table + " tbody").append(tableRows)
+}
+
+function clearProgress(table) {
+    $(table).empty();
+}
+
+function insertProgressRow(table, rowData) {
+    $(table).append('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' 
+        + rowData[2] + '%;" aria-valuenow="' + rowData[2] + '" aria-valuemin="0" aria-valuemax="100"></div></div>');
+    $(table).append('<div class="col-lg-12 row my-2">' +
+        '<div class="col-1 top p-0 m-0 font-weight-bold">' + rowData[3] + '</div>' +
+        '<div class="col-9 name p-0 m-0 text-left">' + rowData[0] + '</div>' +
+        '<div class="col-2 value p-0 m-0">' + rowData[1] + '</div>' + '</div>')
 }
 
 function processMapael(plots, links, areas) {
