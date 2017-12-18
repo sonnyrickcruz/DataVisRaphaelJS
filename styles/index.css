@@ -124,3 +124,12 @@ table {
   .tab-content > div > .row {
       font-size: 13px;
   }
+  
+  .tab-content > div > div > div {
+      border-top: 0px;
+  }
+
+  #tabContents card > card-header {
+    border-top: none;
+    outline: #000
+  }
