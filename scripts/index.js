@@ -44,7 +44,7 @@ function init() {
     $.getJSON("scripts/restCountries3.5.json", function (result) {
         countrySelection = result;
         for (let arr of countrySelection) {
-            if (arr.latlng && arr.latlng[0] && arr.latlng[1]) {
+            if (arr.latlng) {
                 locations[arr.alpha3Code] = arr;
                 if (comtradeLocs[arr.numericCode])
                     $("#countries").append($(new Option("value", arr.alpha3Code)).html(arr.name));
@@ -64,7 +64,6 @@ function init() {
 var ajaxResponse;
 
 function processData(location, year, commodity, commodityOnlyFlag) {
-    console.log(Object.keys(locations))
     var ajaxLink = "./scripts/mockdata.json"
     if (location && year) {
         hidePage()
@@ -85,85 +84,100 @@ function processData(location, year, commodity, commodityOnlyFlag) {
 }
 
 function processResults(result, location, year, commodity) {
+    var plots = new Map();
+    var links = new Map();
+    var areas = new Map();
     var partnerCountriesMap = parsePartnerCountries(result, commodity);
     if (partnerCountriesMap && Object.keys(partnerCountriesMap).length > 0) {
         $("#summaryTab").click();
         var partnerCountriesList = [];
+        var sortedCountries;
+        var count = 5;
+        var countryTopTrade
+        var content;
+        var des;
+
         Object.entries(partnerCountriesMap).forEach(([key, value]) => {
             partnerCountriesList.push(value);
         })
-        var sortedCountries = sortTrade(partnerCountriesList);
-        var plots = new Map();
-        var links = new Map();
-        var areas = new Map();
-        var count = 5;
-        var orig = location;
+
+        sortedCountries = sortTrade(partnerCountriesList);
 
         processWorldTrades(partnerCountriesMap["WLD"], commodity)
         processCountryTrades(sortedCountries)
+
+        plots[location.alpha3Code] = {
+            latitude: location.latlng[0],
+            longitude: location.latlng[1],
+            size: 8,
+            tooltip: { content: location.name }
+        }
         for (let datum of sortedCountries) {
-            if (datum.pt3ISO && locations[datum.pt3ISO] && datum.rt3ISO != "WLD" && datum.pt3ISO != "WLD") {
-                var des = locations[datum.pt3ISO];
-                var polyline2;
-                if (!plots[datum.rt3ISO]) {
-                    areas[orig.alpha2Code] = {
-                        attrs: {
-                            fill: "#f38a03"
-                        }
-                        , attrsHover: {
-                            fill: "#a4e100"
-                        }
-                    }
-                    plots[datum.rt3ISO] = {
-                        latitude: orig.latlng[0],
-                        longitude: orig.latlng[1],
-                        size: 8,
-                        tooltip: { content: datum.rtTitle }
+            des = locations[datum.pt3ISO];
+            if (des && datum.rt3ISO != "WLD" && datum.pt3ISO != "WLD") {
+                countryTopTrade = getTopTradesPerCountry(datum.trades)
+                content = "";
+                plots[datum.pt3ISO] = {
+                    latitude: des.latlng[0],
+                    longitude: des.latlng[1],
+                    size: 0,
+                    text: { content: datum.ptTitle, attrs: { "font-size": 10 } }
+                }
+                if (countryTopTrade.imports.topTrade) {
+                    content = "<div class='font-weight-bold'> Top Import </div>" + commodities[countryTopTrade.imports.topTrade.cmdCode].desc +
+                        "</br> <span class='font-weight-bold'> Total Value: $ </span>" + abbreviateNumber(countryTopTrade.imports.total);
+                }
+                if (countryTopTrade.exports.topTrade) {
+                    content += "<div class='font-weight-bold'> Top Export </div>" + commodities[countryTopTrade.exports.topTrade.cmdCode].desc +
+                        "</br> <span class='font-weight-bold'> Total Value: $ </span>" + abbreviateNumber(countryTopTrade.exports.total)
+                }
+                links[datum.pt3ISO + datum.rt3ISO] = {
+                    factor: -.4,
+                    between: [datum.rt3ISO, datum.pt3ISO],
+                    attrs: {
+                        stroke: "#a4e100",
+                        "stroke-width": (count + 3) / 2,
+                        "stroke-linecap": "round",
+                        "arrow-end": "block",
+                        opacity: .9
+                    }, tooltip: {
+                        content: "<div class='font-weight-bold'> " + datum.rt3ISO + " To " + datum.pt3ISO + "</div>" + content
                     }
                 }
-                if (!isNaN(des.latlng[0]) && !isNaN(des.latlng[1])) {
-                    plots[datum.pt3ISO] = {
-                        latitude: des.latlng[0],
-                        longitude: des.latlng[1],
-                        size: 0
-                    }
-                    var topTrade = datum.trades[0]
-                    areas[des.alpha2Code] = {
-                        "value": datum.TradeValue,
-                        "tooltip": {
-                            "content": "<div class='font-weight-bold'>" + datum.ptTitle +
-                                "</div> <div class='font-weight-bold'>Top Commodity:</div> " + topTrade.cmdDescE +
-                                " <div class='font-weight-bold'>Total Trade Value :</div> $" + abbreviateNumber(datum.TradeValue)
-                        }
-                    }
+                count--;
+            }
+            if (count == 0) {
+                break;
+            }
+        }
 
-                    if (count > 0) {
-                        var countryTopTrade = getTopTradesPerCountry(datum.trades)
-                        //if (des.alpha3Code != "USA" && des.alpha3Code != "FRA")
-                        plots[datum.pt3ISO].text = { content: datum.ptTitle, attrs: { "font-size": 10 } };
-                        var content = "";
-                        if (countryTopTrade.imports.topTrade) {
-                            content = "<div class='font-weight-bold'> Top Import </div>" + commodities[countryTopTrade.imports.topTrade.cmdCode].desc +
-                                "</br> <span class='font-weight-bold'> Total Value: $ </span>" + abbreviateNumber(countryTopTrade.imports.total);
-                        }
-                        if (countryTopTrade.exports.topTrade) {
-                            content += "<div class='font-weight-bold'> Top Export </div>" + commodities[countryTopTrade.exports.topTrade.cmdCode].desc +
-                                "</br> <span class='font-weight-bold'> Total Value: $ </span>" + abbreviateNumber(countryTopTrade.exports.total)
-                        }
-                        links[datum.pt3ISO + datum.rt3ISO] = {
-                            factor: -.4,
-                            between: [datum.rt3ISO, datum.pt3ISO],
-                            attrs: {
-                                stroke: "#a4e100",
-                                "stroke-width": (count + 3) / 2,
-                                "stroke-linecap": "round",
-                                "arrow-end": "block",
-                                opacity: .9
-                            }, tooltip: {
-                                content: "<div class='font-weight-bold'> " + datum.rt3ISO + " To " + datum.pt3ISO + "</div>" + content
-                            }
-                        }
-                        count--;
+        // for area
+        for (let key of Object.keys(locations)) {
+            var des = locations[key];
+            if (partnerCountriesMap[key]) {
+                areas[des.alpha2Code] = {
+                    value: partnerCountriesMap[key].TradeValue,
+                    tooltip: {
+                        content: "<div class='font-weight-bold'>" + partnerCountriesMap[key].ptTitle +
+                            "</div> <div class='font-weight-bold'>Top Commodity:</div> " + partnerCountriesMap[key].trades[0].cmdDescE +
+                            " <div class='font-weight-bold'>Total Trade Value :</div> $" + abbreviateNumber(partnerCountriesMap[key].TradeValue)
+                    }
+                }
+            } else if (location.alpha3Code == key) {
+                areas[des.alpha2Code] = {
+                    attrs: {
+                        fill: "#f38a03"
+                    }, attrsHover: {
+                        fill: "#c43e00"
+                    },
+                    tooltip: {
+                        content: des.name
+                    }
+                }
+            } else {
+                areas[des.alpha2Code] = {
+                    tooltip: {
+                        content: des.name
                     }
                 }
             }
