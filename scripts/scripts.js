@@ -1,7 +1,5 @@
-var SI_PREFIXES = ["", "k", "M", "B", "T", "P", "E"];
-
 function abbreviateNumber(number) {
-
+    var SI_PREFIXES = ["", "k", "M", "B", "T", "P", "E"];
     // what tier? (determines SI prefix)
     var tier = Math.log10(number) / 3 | 0;
 
@@ -70,7 +68,7 @@ function insertProgressRow(table, rowData) {
         '<div class="col-2 value p-0 m-0">' + rowData[1] + '</div>' + '</div>')
 }
 
-function processMapael(plots, links, areas) {
+function initMapael() {
     $(".mapcontainer").mapael({
         map: {
             name: "world_countries",
@@ -145,10 +143,21 @@ function processMapael(plots, links, areas) {
                     }
                 ]
             }
-        },
-        plots: plots,
-        // Links allow you to connect plots between them
-        links: links,
-        areas: areas
+        }
     });
+}
+
+function updateMapael(plots, links, areas) {
+    $(".mapcontainer").trigger('update', {
+        deletePlotKeys : "all",
+        deleteLinkKeys : "all"
+    })
+    $(".mapcontainer").trigger('update', [{
+        mapOptions: {
+            areas: areas
+        },
+        newPlots: plots,
+        newLinks: links,
+        animDuration: 500
+    }])
 }

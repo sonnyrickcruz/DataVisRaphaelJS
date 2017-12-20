@@ -6,13 +6,13 @@ var countrySelection;
 $(document).ready(function () {
     var countriesVal;
     var yearVal;
-    var commoditiesVal; locationbar
+    var commoditiesVal;
     init();
     $(document).on("submit", "#filterForm", function () {
         var val = locations[this.countries.value];
-        if (val && (countriesVal != this.countries.value) ||
+        if (val && ((countriesVal != this.countries.value) ||
             (yearVal != this.year.value) ||
-            (commoditiesVal != this.commodities.value)) {
+            (commoditiesVal != this.commodities.value))) {
             commodityOnlyFlag = (countriesVal == this.countries.value) && (yearVal == this.year.value)
             countriesVal = this.countries.value;
             yearVal = this.year.value;
@@ -25,6 +25,7 @@ $(document).ready(function () {
     })
 });
 function init() {
+    initMapael();
     document.getElementById("mainContent").style.display = "none";
     maxYear = 2016;
     startYear = 2010;
@@ -51,7 +52,7 @@ function init() {
             }
         }
     })
-    $.getJSON("scripts/CommodityHSCodes.2.json", function (result) {
+    $.getJSON("scripts/CommodityHS.2.json", function (result) {
         commodities = result;
         $("#commodities").append($(new Option("value", null)).html("All"));
         for (let key of Object.keys(commodities)) {
@@ -183,7 +184,7 @@ function processResults(result, location, year, commodity) {
             }
         }
         showPage()
-        processMapael(plots, links, areas)
+        updateMapael(plots, links, areas)
     } else {
         $("#messaging > h1").text("No Results found. Please select another commodity or year then click filter.")
         document.getElementById("messaging").style.display = "block";
@@ -370,6 +371,7 @@ function getLoc(code) {
 
 function parsePartnerCountries(result, commodity) {
     var parsedArray = [];
+    console.log(result.dataset)
     for (let data of result.dataset) {
         if (!commodity || commodity == 'null' || commodity == parseInt(data.cmdCode)) {
             if (!parsedArray[data.pt3ISO]) {
@@ -385,6 +387,9 @@ function parsePartnerCountries(result, commodity) {
                     TradeValue: 0,
                     trades: []
                 };
+            }
+            if (data.cmdCode == "0") {
+                console.log(data.cmdCode)
             }
             parsedArray[data.pt3ISO].TradeValue = parsedArray[data.pt3ISO].TradeValue + data.TradeValue;
             parsedArray[data.pt3ISO].trades.push({
