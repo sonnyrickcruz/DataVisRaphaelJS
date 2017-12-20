@@ -148,16 +148,14 @@ function initMapael() {
 }
 
 function updateMapael(plots, links, areas) {
-    $(".mapcontainer").trigger('update', {
-        deletePlotKeys : "all",
-        deleteLinkKeys : "all"
-    })
     $(".mapcontainer").trigger('update', [{
         mapOptions: {
             areas: areas
         },
-        newPlots: plots,
+        deletePlotKeys : "all",
+        deleteLinkKeys : "all",
         newLinks: links,
+        newPlots: plots,
         animDuration: 500
     }])
 }
