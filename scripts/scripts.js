@@ -68,6 +68,11 @@ function insertProgressRow(table, rowData) {
         '<div class="col-2 value p-0 m-0">' + rowData[1] + '</div>' + '</div>')
 }
 
+function insertListRow(table, rowData) {
+    $(table).append('<div class="col-lg-12 row my-2">' +
+        '<div class="col-12 name p-0 m-0 text-left">' + rowData + '</div>' + '</div>')
+}
+
 function initMapael() {
     $(".mapcontainer").mapael({
         map: {

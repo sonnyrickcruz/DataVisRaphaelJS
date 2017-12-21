@@ -58,8 +58,12 @@
                                 aria-selected="true">Top Commodities</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="Partner Countries" data-toggle="tab" href="#countriesTabContent" role="tab" aria-controls="countriesTabContent"
+                            <a class="nav-link" id="partnerCountriesTab" data-toggle="tab" href="#countriesTabContent" role="tab" aria-controls="countriesTabContent"
                                 aria-selected="false">Top Partner Countries</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="othersTab" data-toggle="tab" href="#othersTabContent" role="tab" aria-controls="othersTabContent"
+                                aria-selected="false">Others</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="tabContents">
@@ -123,6 +127,20 @@
                                 <div class="card col-lg-6 p-0 mx-auto">
                                     <div class="card-header title font-weight-bold"></div>
                                     <div id="countryTradeExports">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade container-fluid" id="othersTabContent" role="tabpanel" aria-labelledby="othersTab">
+                            <div class="row">
+                                <div class="card col-lg-6 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold"></div>
+                                    <div id="noTrade" class="px-3 list">
+                                    </div>
+                                </div>
+                                <div class="card col-lg-6 p-0 mx-auto">
+                                    <div class="card-header title font-weight-bold"></div>
+                                    <div id="noCommodityTrade" class="px-3 list">
                                     </div>
                                 </div>
                             </div>

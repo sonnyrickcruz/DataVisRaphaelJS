@@ -97,15 +97,13 @@ function processResults(result, location, year, commodity) {
         var countryTopTrade
         var content;
         var des;
+        var noTrade = [];
 
         Object.entries(partnerCountriesMap).forEach(([key, value]) => {
             partnerCountriesList.push(value);
         })
 
         sortedCountries = sortTrade(partnerCountriesList);
-
-        processWorldTrades(partnerCountriesMap["WLD"], commodity)
-        processCountryTrades(sortedCountries)
 
         plots[location.alpha3Code] = {
             latitude: location.latlng[0],
@@ -181,8 +179,12 @@ function processResults(result, location, year, commodity) {
                         content: des.name
                     }
                 }
+                noTrade.push(des);
             }
         }
+        
+        processWorldTrades(partnerCountriesMap["WLD"], commodity)
+        processCountryTrades(sortedCountries, noTrade)
         showPage()
         updateMapael(plots, links, areas)
     } else {
@@ -208,7 +210,7 @@ function setTotals(value) {
     $("#totalImports").text(abbreviateNumber(value.importsTotal))
     $("#totalExports").text(abbreviateNumber(value.exportsTotal))
 }
-function processCountryTrades(trade) {
+function processCountryTrades(trade, noTrade) {
     // TODO: Top 5 imports and exports
     var title = "Top 5 Exports";
     var tableId = "#countryTradeExports";
@@ -281,6 +283,37 @@ function processCountryTrades(trade) {
                 break;
             }
     }
+    
+    title = "Countries without trade";
+    tableId = "#noTrade";
+    commodityName;
+    topCommodity = null;
+
+    clearProgress(tableId)
+    setTableTitle(tableId, title)
+    for (let country of noTrade) {
+        insertListRow(tableId, country.name)
+    }
+}
+function processNoTrades (trades) {
+    var noTradeCommodity = new Map();
+    var tableId = "#noCommodityTrade";
+    var title = "Commodities without trade"
+    for (let key of Object.keys(commodities)) {
+        noTradeCommodity.set(parseInt(key), commodities[key])
+    }
+    for (let tradeData of trades) {
+        noTradeCommodity.delete(tradeData.cmdCode);
+    }
+    clearProgress(tableId)
+    setTableTitle(tableId, title)
+    if (noTradeCommodity.length > 1) {
+        for (let trade of noTradeCommodity) {
+            insertListRow(tableId, commodities[trade.cmdCode].desc);
+        }
+    } else {
+        $(tableId).append("<h1 class='display-5'>Country has all commodity traded</h1>")
+    }
 }
 function processWorldTrades(trade, commodity) {
     // TODO: Top 5 imports and exports
@@ -290,6 +323,9 @@ function processWorldTrades(trade, commodity) {
     var worldTrades = groupTradeFlows(trade.trades)
     var sortedTrade = sortTrade(worldTrades.imports)
     var sortedAllTrades = sortTrade(trade.trades)
+
+    processNoTrades(trade.trades)
+
     if (commodity != 'null') {
         $("#topTradeCommodity").parent().parent().find(".card-header").text("Trade Commodity")
         $("#topTradeCommodity").text(commodities[commodity].desc)
@@ -416,6 +452,20 @@ function sortTrade(partnerCountriesList) {
     for (i = 0; i < partnerCountriesList.length; i++) {
         for (o = 1; o < partnerCountriesList.length; o++) {
             if (partnerCountriesList[o - 1].TradeValue < partnerCountriesList[o].TradeValue) {
+                temp = partnerCountriesList[o];
+                partnerCountriesList[o] = partnerCountriesList[o - 1];
+                partnerCountriesList[o - 1] = temp;
+            }
+        }
+    }
+    return partnerCountriesList;
+}
+
+
+function sortTradeDesc(partnerCountriesList) {
+    for (i = 0; i < partnerCountriesList.length; i++) {
+        for (o = 1; o < partnerCountriesList.length; o++) {
+            if (partnerCountriesList[o - 1].TradeValue > partnerCountriesList[o].TradeValue) {
                 temp = partnerCountriesList[o];
                 partnerCountriesList[o] = partnerCountriesList[o - 1];
                 partnerCountriesList[o - 1] = temp;

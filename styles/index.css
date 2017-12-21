@@ -133,3 +133,8 @@ table {
     border-top: none;
     outline: #000
   }
+
+  .list {
+      height: 250px;
+      overflow-y: auto;
+  }
