@@ -329,11 +329,13 @@ function processWorldTrades(trade, commodity) {
     if (commodity != 'null') {
         $("#topTradeCommodity").parent().parent().find(".card-header").text("Trade Commodity")
         $("#topTradeCommodity").text(commodities[commodity].desc)
+        $("#noCommodityTrade").parent().addClass("d-none")
         $("#commoditiesTab").addClass("disabled")
     } else {
         $("#commoditiesTab").removeClass("disabled")
         for (let trade of sortedAllTrades) {
             if (commodities[trade.cmdCode]) {
+                $("#noCommodityTrade").parent().removeClass("d-none")
                 $("#topTradeCommodity").parent().parent().find(".card-header").text("Top Trade Commodity")
                 $("#topTradeCommodity").text(commodities[trade.cmdCode].desc)
                 break;
