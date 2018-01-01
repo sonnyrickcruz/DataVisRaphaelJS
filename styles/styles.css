@@ -1,0 +1,79 @@
+nav {
+    background-color: #1f2833;
+}
+
+body {
+    background-color: #151a1d;
+    color: #fff!important;
+}
+
+.nav-tabs .nav-item {
+    background-color: #151a1d;
+    color: #fff;
+}
+.nav-tabs .nav-item .nav-link {
+    color: #fff;
+}
+
+.nav-tabs .nav-item .nav-link:hover {
+    background-color: #1f2833;
+    border-color: #1f2833 #1f2833 #007bff;
+}
+
+.nav-tabs .nav-item .active {
+    background-color: #1f2833;
+    color: #007bff;
+    border-color: #1f2833 #1f2833 #007bff;
+}
+
+.card {
+    background-color: #151a1d;
+}
+.card-header {
+    background-color: #1f2833;
+}
+
+.nav-tabs {
+    border-bottom-color: #1f2833;
+}
+
+.progress {
+    height: 10px;
+}
+
+select.form-control {
+    background-color: #1f2833;
+    color: #fff;
+    border-color: #1f2833;
+}
+
+select:checked.form-control {
+    background-color: #1f2833;
+    color: #fff;
+    border-color: #1f2833;
+}
+
+option {
+    background-color: #151a1d;
+    color: #fff;
+    border-color: #151a1d; 
+}
+
+option:checked {
+    background-color: #1f2833;
+    border-color: #1f2833; 
+}
+
+.mapLegend {
+    color: #fff;
+}
+
+.nav-tabs > .nav-item > .nav-link.disabled {
+    color: #b4a9a1;
+}
+
+.nav-tabs > .nav-item > .nav-link.disabled:hover {
+    cursor: no-drop;
+    background-color: #151a1d;
+    border-color: #151a1d #151a1d #151a1d;
+}

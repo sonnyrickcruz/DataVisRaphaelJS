@@ -112,6 +112,7 @@ function initMapael() {
                 display: true,
                 labelAttrs: {
                     "font-size": 12,
+                    "fill": "#fff"
                 },
                 marginLeft: 5,
                 marginLeftLabel: 5,

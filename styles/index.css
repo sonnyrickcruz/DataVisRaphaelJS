@@ -9,7 +9,7 @@ body {
 
 .mapael .map {
     overflow: auto;
-    background-color: #232323;
+    background-color: #151a1d;
 }
 
 /* For all zoom buttons */
@@ -82,9 +82,9 @@ table {
     width: 150px;
     height: 150px;
     margin: -75px 0 0 -75px;
-    border: 16px solid #f3f3f3;
+    border: 10px solid #1f2833;
     border-radius: 50%;
-    border-top: 16px solid #3498db;
+    border-top: 10px solid #3498db;
     width: 120px;
     height: 120px;
     -webkit-animation: spin 1s linear infinite;
