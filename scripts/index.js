@@ -2,6 +2,7 @@
 var locations;
 var commodities;
 var countrySelection;
+var isMapInit;
 
 $(document).ready(function () {
     var countriesVal;
@@ -25,8 +26,6 @@ $(document).ready(function () {
     })
 });
 function init() {
-    initMapael();
-    document.getElementById("mainContent").style.display = "none";
     maxYear = 2016;
     startYear = 2010;
 
@@ -182,10 +181,13 @@ function processResults(result, location, year, commodity) {
                 noTrade.push(des);
             }
         }
-        
+
         processWorldTrades(partnerCountriesMap["WLD"], commodity)
         processCountryTrades(sortedCountries, noTrade)
         showPage()
+        if (!isMapInit) {
+            initMapael();
+        }
         updateMapael(plots, links, areas)
     } else {
         $("#messaging > h1").text("No Results found. Please select another commodity or year then click filter.")
@@ -196,6 +198,7 @@ function processResults(result, location, year, commodity) {
 
 function showPage() {
     document.getElementById("loader").style.display = "none";
+    $("#mainContent").removeClass("d-none")
     document.getElementById("mainContent").style.display = "block";
 }
 
@@ -283,7 +286,7 @@ function processCountryTrades(trade, noTrade) {
                 break;
             }
     }
-    
+
     title = "Countries without trade";
     tableId = "#noTrade";
     commodityName;
@@ -295,7 +298,7 @@ function processCountryTrades(trade, noTrade) {
         insertListRow(tableId, country.name)
     }
 }
-function processNoTrades (trades) {
+function processNoTrades(trades) {
     var noTradeCommodity = new Map();
     var tableId = "#noCommodityTrade";
     var title = "Commodities without trade"

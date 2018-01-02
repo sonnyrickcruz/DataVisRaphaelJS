@@ -74,6 +74,7 @@ function insertListRow(table, rowData) {
 }
 
 function initMapael() {
+    isMapInit = true;
     $(".mapcontainer").mapael({
         map: {
             name: "world_countries",
