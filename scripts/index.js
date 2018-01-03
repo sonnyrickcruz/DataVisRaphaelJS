@@ -36,18 +36,19 @@ function init() {
     comtradeLocs = new Map();
     locations = new Map();
     $("#countries").append($(new Option("value", null)).html("Select Country"));
-    $.getJSON("scripts/reporterAreas.json", function (result) {
+    $.getJSON("scripts/reporterAreas.1.json", function (result) {
         for (let arr of result.results) {
             comtradeLocs[("00" + arr.id).slice(-3)] = arr;
         }
     })
-    $.getJSON("scripts/restCountries3.5.json", function (result) {
+    $.getJSON("scripts/restCountries3.7.json", function (result) {
         countrySelection = result;
         for (let arr of countrySelection) {
             if (arr.latlng) {
                 locations[arr.alpha3Code] = arr;
-                if (comtradeLocs[arr.numericCode])
+                if (comtradeLocs[arr.numericCode]) {
                     $("#countries").append($(new Option("value", arr.alpha3Code)).html(arr.name));
+                }
             }
         }
     })
@@ -67,8 +68,8 @@ function processData(location, year, commodity, commodityOnlyFlag) {
     var ajaxLink = "./scripts/mockdata.json"
     if (location && year) {
         hidePage()
-        //ajaxLink = "https://comtrade.un.org/api/get?r=" + location.numericCode + "&px=HS&ps=" + year + "&type=C&freq=A"
-        location = locations["CHN"]
+        ajaxLink = "https://comtrade.un.org/api/get?r=" + location.numericCode + "&px=HS&ps=" + year + "&type=C&freq=A"
+        //location = locations["CHN"]
     }
     if (ajaxResponse && commodityOnlyFlag) {
         processResults(ajaxResponse, location, year, commodity)
@@ -412,7 +413,6 @@ function getLoc(code) {
 
 function parsePartnerCountries(result, commodity) {
     var parsedArray = [];
-    console.log(result.dataset)
     for (let data of result.dataset) {
         if (!commodity || commodity == 'null' || commodity == parseInt(data.cmdCode)) {
             if (!parsedArray[data.pt3ISO]) {
@@ -428,9 +428,6 @@ function parsePartnerCountries(result, commodity) {
                     TradeValue: 0,
                     trades: []
                 };
-            }
-            if (data.cmdCode == "0") {
-                console.log(data.cmdCode)
             }
             parsedArray[data.pt3ISO].TradeValue = parsedArray[data.pt3ISO].TradeValue + data.TradeValue;
             parsedArray[data.pt3ISO].trades.push({

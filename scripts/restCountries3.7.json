@@ -774,7 +774,7 @@
             46.0,
             2.0
         ],
-        "numericCode": "250"
+        "numericCode": "251"
     },
     {
         "name": "French Guiana",
@@ -1124,7 +1124,7 @@
             42.83333333,
             12.83333333
         ],
-        "numericCode": "380"
+        "numericCode": "381"
     },
     {
         "name": "Jamaica",
@@ -1674,7 +1674,7 @@
             62.0,
             10.0
         ],
-        "numericCode": "578"
+        "numericCode": "579"
     },
     {
         "name": "Oman",
@@ -2193,7 +2193,7 @@
             47.0,
             8.0
         ],
-        "numericCode": "756"
+        "numericCode": "757"
     },
     {
         "name": "Syrian Arab Republic",
@@ -2393,7 +2393,7 @@
             38.0,
             -97.0
         ],
-        "numericCode": "840"
+        "numericCode": "842"
     },
     {
         "name": "Uruguay",

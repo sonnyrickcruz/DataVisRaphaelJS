@@ -178,6 +178,10 @@
             "text": "China"
         },
         {
+            "id": "158",
+            "text": "Taiwan"
+        },
+        {
             "id": "344",
             "text": "Hong Kong"
         },
@@ -428,6 +432,10 @@
         {
             "id": "312",
             "text": "Guadeloupe"
+        },
+        {
+            "id": "316",
+            "text": "Guam"
         },
         {
             "id": "320",
@@ -728,6 +736,10 @@
         {
             "id": "620",
             "text": "Portugal"
+        },
+        {
+            "id": "630",
+            "text": "Puerto Rico"
         },
         {
             "id": "634",
